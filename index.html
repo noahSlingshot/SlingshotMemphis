@@ -93,31 +93,6 @@ h1 {
 
 <p id="Outcomes">Outcomes</p>
 
-
-
-<br>
-
-Type a Path to delete:<br>
-<input name="delete_input" id="delete" type="text" />
-<input name="buttonExecute" onclick="DataDelete(document.getElementById('delete').value)" type="button" value="Delete" />
-
-<br><br><br>
-
-<br>Type the info you would like to add: <br>
-<input name="data" id="add_data" type="text" />
-
-<br>
-
-<br>Type a Path to add:<br>
-<input name="data_path" id="path" type="text" />
-
-<br>
-<br>
-
-
-<input name="ButtonAdd" onclick="DataAdd( (document.getElementById('path').value),(document.getElementById('add_data').value) )" type="button" value="Add" />
-
-
 <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
 <script>
 
@@ -310,34 +285,7 @@ dbRef.on('value',function(snapshot) {
 });
 
 
-//this totally works 
-function DataDelete(Delete_input){
-	var adaRef = firebase.database().ref(Delete_input); //Delete_input is a path
-	adaRef.remove()
-		.then(function(){
-			console.log("Remove succeeded.")
-		})
-		.catch(function(error){
-			console.log("Remove failed: "+ error.message)
-		});
-}
-
-function DataAdd(data_path, Add_input){
-	var rootRef = firebase.database().ref();
-	var storesRef = rootRef.child(data_path);
-	var newStoreRef = storesRef.push();
-	newStoreRef.set({
-		Add_input
-	});
-}
-
-
-
 
 </script>
-
 </body>
-
 </html>
-
-
