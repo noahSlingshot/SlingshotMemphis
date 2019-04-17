@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+.answer_list {
+	display: table;
+}
+
+
+.button-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.bttn { 
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  border-color: #0FA6A5;
+  color: #0FA6A5;
+  width: 50%;
+ margin: 10px;
+  vertical-align: middle;
+}
+.bttn:hover {
+  background-color: #0FA6A5;
+  color: white;
+}
+
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  border-color: #0FA6A5;
+  color: #0FA6A5;
+  margin: 10px;
+}
+.btn:hover {
+  background-color: #0FA6A5;
+  color: white;
+}
+
+h1 {
+	padding: 30px 15px;
+	background-color:#053468;
+	color: white;
+}
+
+</style>
+</head>
+<body>
+
+<h1> </h1>
+
+<p id="p1"> </p>
+
+<img src="Slingshot_logo_standard.jpg" alt="Slingshot logo" style="width:300px;height:100px;">
+
+<div class="container">
+<button id="CodeCrew" class="btn CodeCrew" onclick="showDiv()">CodeCrew</button>
+<button id="MCR" class="btn MCR" onclick="showMCRDiv()">Memphis City Rugby</button>
+<button id="Tech901" class="btn Tech901">Tech901</button>
+</div>
+
+<div id="CodeCrewDiv"  style="display:none;" class="answer_list" > 
+<div class="button-wrapper">
+<button class="bttn Code School">Code School</button>
+<button class="bttn Internships">Internships</button>
+<button class="bttn Exposure Events">Exposure Events</button>
+</div>
+</div>
+
+<div id="MCRDiv"  style="display:none;" class="answer_list" > 
+<div class="button-wrapper">
+<button class="bttn Academic Interventions">Academic Interventions</button>
+<button class="bttn Value Based Coaching">Value Based Coaching</button>
+<button class="bttn Yoga and Crossfit">Yoga and Crossfit</button>
+<button class="bttn Competitive Rugby">Competitive Rugby</button>
+<button class="bttn Comprehensive Rugby Program">Comprehensive Rugby Program</button>
+</div>
+</div>
+
+<p id="ProgramArea">Program Areas</p>
+
+<p id="Interventions">Interventions</p>
+
+<p id="Outcomes">Outcomes</p>
+
+
+
+<br>
+
+Type a Path to delete:<br>
+<input name="delete_input" id="delete" type="text" />
+<input name="buttonExecute" onclick="DataDelete(document.getElementById('delete').value)" type="button" value="Delete" />
+
+<br><br><br>
+
+<br>Type the info you would like to add: <br>
+<input name="data" id="add_data" type="text" />
+
+<br>
+
+<br>Type a Path to add:<br>
+<input name="data_path" id="path" type="text" />
+
+<br>
+<br>
+
+
+<input name="ButtonAdd" onclick="DataAdd( (document.getElementById('path').value),(document.getElementById('add_data').value) )" type="button" value="Add" />
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+<script>
+
+function showDiv() {
+   document.getElementById('CodeCrewDiv').style.display = "block";
+   document.getElementById('MCRDiv').style.display = "none";
+   var mcr = document.getElementById('MCR');
+   var tech901 = document.getElementById('Tech901');
+   var cc = document.getElementById('CodeCrew');
+   mcr.style.color = "#D0D0D0";
+   mcr.style.borderColor = "#D0D0D0";
+   tech901.style.color = "#D0D0D0";
+   tech901.style.borderColor = "#D0D0D0";
+   cc.style.color = "#0FA6A5";
+   cc.style.borderColor = "#0FA6A5";
+}
+
+function showMCRDiv() {
+   document.getElementById('MCRDiv').style.display = "block";
+   document.getElementById('CodeCrewDiv').style.display = "none";
+   var cc = document.getElementById('CodeCrew');
+   var tech901 = document.getElementById('Tech901');
+   var mcr = document.getElementById('MCR');
+   mcr.style.color = "#0FA6A5";
+   mcr.style.borderColor = "#0FA6A5";
+   cc.style.color = "#D0D0D0";
+   cc.style.borderColor = "#D0D0D0";
+   tech901.style.color = "#D0D0D0";
+   tech901.style.borderColor = "#D0D0D0";
+}
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAfR9m36AUnYkiRUnmvxV_itLZvn0H7RfM",
+    authDomain: "memphis-slingshot.firebaseapp.com",
+    databaseURL: "https://memphis-slingshot.firebaseio.com",
+    projectId: "memphis-slingshot",
+    storageBucket: "memphis-slingshot.appspot.com",
+    messagingSenderId: "459475175656"
+  };
+  firebase.initializeApp(config);
+
+
+var ProgramArea = document.getElementById('ProgramArea');
+var dbRef = firebase.database().ref().child('tree/0/ProgramArea');
+//dbRef.on('value', snap => ProgramArea.innerText = snap.val());
+dbRef.on('value',function(snapshot) {
+	snapshot.forEach(function(childSnapshot) {
+		var childData=childSnapshot.val();
+		console.log(childSnapshot.key);
+		newdbRef=firebase.database().ref().child('tree/0/ProgramArea/'+childSnapshot.key);
+		newdbRef.on('value',function(snapshot) {
+			snapshot.forEach(function(childSnapshot) {
+				var nextchildData=childSnapshot.val();
+				console.log(nextchildData);
+				var p2 = document.createElement('p');
+
+				 p2.innerHTML = nextchildData;
+    
+				var elem = document.getElementById("ProgramArea");
+  
+				elem.parentNode.insertBefore(p2, elem.nextSibling);
+			});
+		});
+	});
+});
+
+
+var dbRef = firebase.database().ref().child('tree/1/Interventions');
+//dbRef.on('value', snap => ProgramArea.innerText = snap.val());
+dbRef.on('value',function(snapshot) {
+	snapshot.forEach(function(childSnapshot) {
+		dbstring='tree/1/Interventions/'+childSnapshot.key;
+		newdbRef=firebase.database().ref().child('tree/1/Interventions/'+childSnapshot.key);
+		newdbRef.on('value',function(snapshot) {
+			snapshot.forEach(function(childSnapshot) {
+				var nextchildData=childSnapshot.key;
+				console.log(nextchildData);
+				var p2 = document.createElement('p');
+
+				 p2.innerHTML = nextchildData;
+    
+				var elem = document.getElementById("Interventions");
+  
+				elem.parentNode.insertBefore(p2, elem.nextSibling);
+
+				dbstring=dbstring+'/'+childSnapshot.key;
+				newnewdbRef=firebase.database().ref().child(dbstring);
+				newnewdbRef.on('value',function(snapshot) {
+					snapshot.forEach(function(childSnapshot) {
+						newdbstring=dbstring+'/'+childSnapshot.key;
+						num=childSnapshot.key;
+						newnewdbRef=firebase.database().ref().child(newdbstring);
+						console.log(newnewdbRef);
+						newnewdbRef.on('value',function(snapshot) {
+							snapshot.forEach(function(childSnapshot) {
+								if(num<=1) {
+									var nextchildData=childSnapshot.val();
+									console.log(nextchildData);
+									var p2 = document.createElement('p');
+
+									 p2.innerHTML = nextchildData;
+    
+									var elem = document.getElementById("Interventions");
+  
+									elem.parentNode.insertBefore(p2, elem.nextSibling);
+									}
+
+									dbstring3=newdbstring+'/'+childSnapshot.key;
+									console.log(dbstring3);
+									newnewnewdbRef=firebase.database().ref().child(dbstring3);
+									newnewnewdbRef.on('value',function(snapshot) {
+										snapshot.forEach(function(childSnapshot) {
+											dbstring4=dbstring3+'/'+childSnapshot.key;
+											console.log(dbstring4);
+											newnewnewnewdbRef=firebase.database().ref().child(dbstring4);
+											newnewnewnewdbRef.on('value',function(snapshot) {
+												snapshot.forEach(function(childSnapshot) {
+													var nextchildData=childSnapshot.val();
+													var pa=childSnapshot.key;
+													console.log(nextchildData);
+													if(pa=='P1') {
+														var p3 = document.createElement('p');
+														p3.innerHTML = 'Education';
+														var elem = document.getElementById("Interventions");
+														elem.parentNode.insertBefore(p3, elem.nextSibling);
+													}
+													else if(pa=='P2') {
+														var p3 = document.createElement('p');
+														p3.innerHTML = 'Jobs and Economic Security';
+														var elem = document.getElementById("Interventions");
+														elem.parentNode.insertBefore(p3, elem.nextSibling);
+													}
+													else if(pa=='P3') {
+														var p3 = document.createElement('p');
+														p3.innerHTML = 'Early Childhood & Youth';
+														var elem = document.getElementById("Interventions");
+														elem.parentNode.insertBefore(p3, elem.nextSibling);
+													}
+													else if(pa=='P4') {
+														var p3 = document.createElement('p');
+														p3.innerHTML = 'Stabilization';
+														var elem = document.getElementById("Interventions");
+														elem.parentNode.insertBefore(p3, elem.nextSibling);
+													}
+													else {
+													var p3 = document.createElement('p');
+
+													 p3.innerHTML = nextchildData;
+    
+													var elem = document.getElementById("Interventions");
+  
+													elem.parentNode.insertBefore(p3, elem.nextSibling);
+													}
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+	});
+});
+
+
+var dbRef = firebase.database().ref().child('tree/2/Outcomes');
+//dbRef.on('value', snap => ProgramArea.innerText = snap.val());
+dbRef.on('value',function(snapshot) {
+	snapshot.forEach(function(childSnapshot) {
+		var childData=childSnapshot.val();
+		console.log(childSnapshot.key);
+		newdbRef=firebase.database().ref().child('tree/2/Outcomes/'+childSnapshot.key);
+		newdbRef.on('value',function(snapshot) {
+			snapshot.forEach(function(childSnapshot) {
+				var nextchildData=childSnapshot.val();
+				console.log(nextchildData);
+				var p2 = document.createElement('p');
+
+				 p2.innerHTML = nextchildData;
+    
+				var elem = document.getElementById("Outcomes");
+  
+				elem.parentNode.insertBefore(p2, elem.nextSibling);
+			});
+		});
+	});
+});
+
+
+//this totally works 
+function DataDelete(Delete_input){
+	var adaRef = firebase.database().ref(Delete_input); //Delete_input is a path
+	adaRef.remove()
+		.then(function(){
+			console.log("Remove succeeded.")
+		})
+		.catch(function(error){
+			console.log("Remove failed: "+ error.message)
+		});
+}
+
+function DataAdd(data_path, Add_input){
+	var rootRef = firebase.database().ref();
+	var storesRef = rootRef.child(data_path);
+	var newStoreRef = storesRef.push();
+	newStoreRef.set({
+		Add_input
+	});
+}
+
+
+
+
+</script>
+
+</body>
+
+</html>
+
+
