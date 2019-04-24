@@ -61,68 +61,60 @@ h1 {
 
 <p id="p1"> </p>
 
-<img src="Slingshot_logo_standard.jpg" alt="Slingshot logo" style="width:300px;height:100px;">
+<img id="logo" src="Slingshot_logo_standard.jpg" alt="Slingshot logo" style="width:300px;height:100px;">
 
-<div class="container">
-<button id="CodeCrew" class="btn CodeCrew" onclick="showDiv()">CodeCrew</button>
-<button id="MCR" class="btn MCR" onclick="showMCRDiv()">Memphis City Rugby</button>
-<button id="Tech901" class="btn Tech901">Tech901</button>
+<div id="cont" class="container">
+
 </div>
 
-<div id="CodeCrewDiv"  style="display:none;" class="answer_list" > 
-<div class="button-wrapper">
-<button class="bttn Code School">Code School</button>
-<button class="bttn Internships">Internships</button>
-<button class="bttn Exposure Events">Exposure Events</button>
-</div>
+<div id="Code Crew Div"  style="display:none;" class="answer_list" > 
+
 </div>
 
-<div id="MCRDiv"  style="display:none;" class="answer_list" > 
-<div class="button-wrapper">
-<button class="bttn Academic Interventions">Academic Interventions</button>
-<button class="bttn Value Based Coaching">Value Based Coaching</button>
-<button class="bttn Yoga and Crossfit">Yoga and Crossfit</button>
-<button class="bttn Competitive Rugby">Competitive Rugby</button>
-<button class="bttn Comprehensive Rugby Program">Comprehensive Rugby Program</button>
+
+<div id="Memphis City Rugby Div"  style="display:none;" class="answer_list" > 
+<div id="button-wrapper" class="button-wrapper">
+
 </div>
 </div>
 
-<p id="ProgramArea">Program Areas</p>
+<div id="Tech901 Div"  style="display:none;" class="answer_list" > 
+<div id="button-wrapper" class="button-wrapper">
 
-<p id="Interventions">Interventions</p>
+</div>
+</div>
 
-<p id="Outcomes">Outcomes</p>
+<div id="Code School Div" style="display:none;" class="answer_list" > 
+<div id="button-wrapper" class="button-wrapper">
+<button id="Code School Examples" class="btn">Examples</btn>
+<button id="Code School Program Areas" class="btn">Porgram Areas</btn>
+<button id="Code School Outcomes" class="btn">Outcomes</btn>
+</div>
+<p id="parag"></p>
+</div>
+
+<div id="Internships Div"  style="display:none;" class="answer_list" > 
+<div id="button-wrapper" class="button-wrapper">
+
+</div>
+</div>
+
+<div id="Exposure Events Div"  style="display:none;" class="answer_list" > 
+<div id="button-wrapper" class="button-wrapper">
+
+</div>
+</div>
+
+<p id="ProgramArea"></p>
+
+<p id="Interventions"></p>
+
+<p id="Outcomes"></p>
 
 <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
 <script>
 
-function showDiv() {
-   document.getElementById('CodeCrewDiv').style.display = "block";
-   document.getElementById('MCRDiv').style.display = "none";
-   var mcr = document.getElementById('MCR');
-   var tech901 = document.getElementById('Tech901');
-   var cc = document.getElementById('CodeCrew');
-   mcr.style.color = "#D0D0D0";
-   mcr.style.borderColor = "#D0D0D0";
-   tech901.style.color = "#D0D0D0";
-   tech901.style.borderColor = "#D0D0D0";
-   cc.style.color = "#0FA6A5";
-   cc.style.borderColor = "#0FA6A5";
-}
 
-function showMCRDiv() {
-   document.getElementById('MCRDiv').style.display = "block";
-   document.getElementById('CodeCrewDiv').style.display = "none";
-   var cc = document.getElementById('CodeCrew');
-   var tech901 = document.getElementById('Tech901');
-   var mcr = document.getElementById('MCR');
-   mcr.style.color = "#0FA6A5";
-   mcr.style.borderColor = "#0FA6A5";
-   cc.style.color = "#D0D0D0";
-   cc.style.borderColor = "#D0D0D0";
-   tech901.style.color = "#D0D0D0";
-   tech901.style.borderColor = "#D0D0D0";
-}
 
   // Initialize Firebase
   var config = {
@@ -135,22 +127,31 @@ function showMCRDiv() {
   };
   firebase.initializeApp(config);
 
-
+organizations=new Array();
+totalorgs=0;
+intervens=new Array();
+totalintervens=0;
+examples=new Array();
+totalexamples=0;
+progareas=new Array();
+totalareas=0;
+outcomes=new Array();
+totaloutcomes=0;
 var ProgramArea = document.getElementById('ProgramArea');
 var dbRef = firebase.database().ref().child('tree/0/ProgramArea');
 //dbRef.on('value', snap => ProgramArea.innerText = snap.val());
 dbRef.on('value',function(snapshot) {
 	snapshot.forEach(function(childSnapshot) {
 		var childData=childSnapshot.val();
-		console.log(childSnapshot.key);
+		
 		newdbRef=firebase.database().ref().child('tree/0/ProgramArea/'+childSnapshot.key);
 		newdbRef.on('value',function(snapshot) {
 			snapshot.forEach(function(childSnapshot) {
 				var nextchildData=childSnapshot.val();
-				console.log(nextchildData);
+			
 				var p2 = document.createElement('p');
 
-				 p2.innerHTML = nextchildData;
+				 //p2.innerHTML = nextchildData;
     
 				var elem = document.getElementById("ProgramArea");
   
@@ -170,10 +171,10 @@ dbRef.on('value',function(snapshot) {
 		newdbRef.on('value',function(snapshot) {
 			snapshot.forEach(function(childSnapshot) {
 				var nextchildData=childSnapshot.key;
-				console.log(nextchildData);
 				var p2 = document.createElement('p');
 
-				 p2.innerHTML = nextchildData;
+				 //p2.innerHTML = nextchildData;
+				 totalintervens=intervens.push(nextchildData);
     
 				var elem = document.getElementById("Interventions");
   
@@ -186,62 +187,77 @@ dbRef.on('value',function(snapshot) {
 						newdbstring=dbstring+'/'+childSnapshot.key;
 						num=childSnapshot.key;
 						newnewdbRef=firebase.database().ref().child(newdbstring);
-						console.log(newnewdbRef);
+				
 						newnewdbRef.on('value',function(snapshot) {
 							snapshot.forEach(function(childSnapshot) {
 								if(num<=1) {
 									var nextchildData=childSnapshot.val();
-									console.log(nextchildData);
+									
 									var p2 = document.createElement('p');
+							
+									//p2.innerHTML = nextchildData;
+									if(num==0) {
 
-									 p2.innerHTML = nextchildData;
-    
+										totalorgs=organizations.push(nextchildData);
+										//console.log(organizations);
+									}
+									
+									else if(num==1) {
+										
+										totalexamples=examples.push(nextchildData);
+										//console.log(examples[0]);
+										
+									}
 									var elem = document.getElementById("Interventions");
   
 									elem.parentNode.insertBefore(p2, elem.nextSibling);
 									}
-
+									
 									dbstring3=newdbstring+'/'+childSnapshot.key;
-									console.log(dbstring3);
+									
 									newnewnewdbRef=firebase.database().ref().child(dbstring3);
 									newnewnewdbRef.on('value',function(snapshot) {
 										snapshot.forEach(function(childSnapshot) {
 											dbstring4=dbstring3+'/'+childSnapshot.key;
-											console.log(dbstring4);
+											
 											newnewnewnewdbRef=firebase.database().ref().child(dbstring4);
 											newnewnewnewdbRef.on('value',function(snapshot) {
 												snapshot.forEach(function(childSnapshot) {
 													var nextchildData=childSnapshot.val();
 													var pa=childSnapshot.key;
-													console.log(nextchildData);
+													
 													if(pa=='P1') {
 														var p3 = document.createElement('p');
-														p3.innerHTML = 'Education';
+														//p3.innerHTML = 'Education';
+														totalareas=progareas.push("Education");
 														var elem = document.getElementById("Interventions");
 														elem.parentNode.insertBefore(p3, elem.nextSibling);
 													}
 													else if(pa=='P2') {
 														var p3 = document.createElement('p');
-														p3.innerHTML = 'Jobs and Economic Security';
+														//p3.innerHTML = 'Jobs and Economic Security';
+														totalareas=progareas.push("Jobs and Economic Security");
 														var elem = document.getElementById("Interventions");
 														elem.parentNode.insertBefore(p3, elem.nextSibling);
 													}
 													else if(pa=='P3') {
 														var p3 = document.createElement('p');
-														p3.innerHTML = 'Early Childhood & Youth';
+														//p3.innerHTML = 'Early Childhood & Youth';
+														totalareas=progareas.push("Early Childhood & Youth");
 														var elem = document.getElementById("Interventions");
 														elem.parentNode.insertBefore(p3, elem.nextSibling);
 													}
 													else if(pa=='P4') {
 														var p3 = document.createElement('p');
-														p3.innerHTML = 'Stabilization';
+														//p3.innerHTML = 'Stabilization';
+														totalareas=progareas.push("Stabilization");
 														var elem = document.getElementById("Interventions");
 														elem.parentNode.insertBefore(p3, elem.nextSibling);
 													}
 													else {
 													var p3 = document.createElement('p');
 
-													 p3.innerHTML = nextchildData;
+													 //p3.innerHTML = nextchildData;
     
 													var elem = document.getElementById("Interventions");
   
@@ -258,7 +274,154 @@ dbRef.on('value',function(snapshot) {
 			});
 		});
 	});
-});
+
+	uniqueOrgs = Array.from(new Set(organizations));
+	console.log(intervens);
+	var divv=document.getElementById("cont");
+	var div2=document.getElementById(uniqueOrgs[0]+' Div');
+	var div3=document.getElementById(uniqueOrgs[2]+' Div');
+	var div4=document.getElementById(uniqueOrgs[1]+' Div');
+	var ctr=0;
+	var counter=0;
+	uniqueOrgs.forEach(function(element) {
+		var orgbutton=document.createElement("button");
+		orgbutton.classList.add("btn");
+		orgbutton.id=element;
+		orgbutton.innerHTML=element;
+		divv.appendChild(orgbutton);
+		if(ctr==0) {
+			orgbutton.onclick=showDiv;
+			orgbutton.id=uniqueOrgs[ctr];
+		}
+		else if(ctr==1) {
+			orgbutton.onclick=showDiv3;
+			orgbutton.id=uniqueOrgs[ctr];
+		}
+		else if(ctr==2) {
+			orgbutton.onclick=showDiv2;
+			orgbutton.id=uniqueOrgs[ctr];
+		}
+		ctr++;
+	});
+
+	organizations.forEach(function(element) {
+	console.log(organizations[counter]);
+		if(organizations[counter]==uniqueOrgs[0]) {
+			var interbutton=document.createElement("button");
+			interbutton.classList.add("btn")
+			interbutton.innerHTML=intervens[counter];
+			interbutton.id=intervens[counter];
+			if(intervens[counter]=="Code School") {
+				interbutton.onclick=CodeSchool;
+			}
+			else if(intervens[counter]=="Internships ") {
+				interbutton.onclick=Internships;
+			}
+			else if(intervens[counter]=="Exposure Events") {
+				interbutton.onclick=ExposureEvents;
+			}
+			console.log(counter);
+			div2.appendChild(interbutton);
+			
+		}
+		else if(organizations[counter]==uniqueOrgs[2]) {
+			var interbutton=document.createElement("button");
+			interbutton.classList.add("btn")
+			interbutton.innerHTML=intervens[counter];
+			interbutton.id=intervens[counter];
+			if(intervens[counter]=="Academic Interventions") {
+				interbutton.onclick=AcademicInter;
+			}
+			else if(intervens[counter]=="Value based coaching") {
+				interbutton.onclick=ValueBased;
+			}
+			else if(intervens[counter]=="Yoga and Crossfit") {
+				interbutton.onclick=Yoga;
+			}
+			else if(intervens[counter]=="Competitive Rugby") {
+				interbutton.onclick=CompRugby;
+			}
+			else if(intervens[counter]=="Comprehensive Rugby Program") {
+				interbutton.onclick=ComprehenRugby;
+			}
+			div3.appendChild(interbutton);
+			
+		}
+		else if(organizations[counter]==uniqueOrgs[1]) {
+			var interbutton=document.createElement("button");
+			interbutton.classList.add("btn")
+			interbutton.innerHTML=intervens[counter];
+			interbutton.id=intervens[counter];
+			if(intervens[counter]=="Coding Classes") {
+				interbutton.onclick=CodingClasses;
+			}
+			else if(intervens[counter]=="Networking") {
+				interbutton.onclick=Networking;
+			}
+			div4.appendChild(interbutton);	
+		
+		}
+		counter++;
+		
+	});
+
+
+var str=uniqueOrgs[0]+' Div';
+var str1=uniqueOrgs[1]+' Div';
+var str2=uniqueOrgs[2]+' Div';
+
+
+
+
+function showDiv() {
+   document.getElementById(str).style.display = "block";
+   document.getElementById(str1).style.display = "none";
+   document.getElementById(str2).style.display = "none";
+   var org1 = document.getElementById(uniqueOrgs[0]);
+   var org2 = document.getElementById(uniqueOrgs[1]);
+   var org3 = document.getElementById(uniqueOrgs[2]);
+   org3.style.color = "#D0D0D0";
+   org3.style.borderColor = "#D0D0D0";
+   org2.style.color = "#D0D0D0";
+   org2.style.borderColor = "#D0D0D0";
+   org1.style.color = "#0FA6A5";
+   org1.style.borderColor = "#0FA6A5";
+}
+
+function showDiv2() {
+document.getElementById(str).style.display = "none";
+   document.getElementById(str1).style.display = "none";
+   document.getElementById(str2).style.display = "block";
+   var org1 = document.getElementById(uniqueOrgs[0]);
+   var org2 = document.getElementById(uniqueOrgs[1]);
+   var org3 = document.getElementById(uniqueOrgs[2]);
+   org1.style.color = "#D0D0D0";
+   org1.style.borderColor = "#D0D0D0";
+   org2.style.color = "#D0D0D0";
+   org2.style.borderColor = "#D0D0D0";
+   org3.style.color = "#0FA6A5";
+   org3.style.borderColor = "#0FA6A5";
+}
+
+function showDiv3() {
+  document.getElementById(str).style.display = "none";
+   document.getElementById(str1).style.display = "block";
+   document.getElementById(str2).style.display = "none";
+   var org1 = document.getElementById(uniqueOrgs[0]);
+   var org2 = document.getElementById(uniqueOrgs[1]);
+   var org3 = document.getElementById(uniqueOrgs[2]);
+   org3.style.color = "#D0D0D0";
+   org3.style.borderColor = "#D0D0D0";
+   org1.style.color = "#D0D0D0";
+   org1.style.borderColor = "#D0D0D0";
+   org2.style.color = "#0FA6A5";
+   org2.style.borderColor = "#0FA6A5";
+}
+
+
+
+
+	
 
 
 var dbRef = firebase.database().ref().child('tree/2/Outcomes');
@@ -266,15 +429,18 @@ var dbRef = firebase.database().ref().child('tree/2/Outcomes');
 dbRef.on('value',function(snapshot) {
 	snapshot.forEach(function(childSnapshot) {
 		var childData=childSnapshot.val();
-		console.log(childSnapshot.key);
+		
 		newdbRef=firebase.database().ref().child('tree/2/Outcomes/'+childSnapshot.key);
 		newdbRef.on('value',function(snapshot) {
 			snapshot.forEach(function(childSnapshot) {
 				var nextchildData=childSnapshot.val();
-				console.log(nextchildData);
+				
 				var p2 = document.createElement('p');
 
-				 p2.innerHTML = nextchildData;
+				 //p2.innerHTML = nextchildData;
+				 console.log("OUTCOMES");
+				 console.log(nextchildData);
+				 totaloutcomes=outcomes.push(nextchildData);
     
 				var elem = document.getElementById("Outcomes");
   
@@ -284,7 +450,631 @@ dbRef.on('value',function(snapshot) {
 	});
 });
 
+function CodeSchool() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Internships ");
+	var butn2=document.getElementById("Code School");
+	var butn3=document.getElementById("Exposure Events");
+	butn2.style.color="#0FA6A5";
+	butn2.style.borderColor = "#0FA6A5";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[0];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[0]+" and "+progareas[1]
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[0]+", "+outcomes[1]+", "+outcomes[2];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
 
+function Internships() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Internships ");
+	var butn2=document.getElementById("Code School");
+	var butn3=document.getElementById("Exposure Events");
+	butn.style.color="#0FA6A5";
+	butn.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[1];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[2]+" and "+progareas[3];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[3]+", "+outcomes[4]+", "+outcomes[5];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function ExposureEvents() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Internships ");
+	var butn2=document.getElementById("Code School");
+	var butn3=document.getElementById("Exposure Events");
+	butn3.style.color="#0FA6A5";
+	butn3.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[2];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[4];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[6]+" and "+outcomes[7];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function CodingClasses() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Coding Classes");
+	var butn2=document.getElementById("Networking");
+	butn.style.color="#0FA6A5";
+	butn.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[3];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[5]+", "+progareas[6]+", and "+progareas[7];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[0]+", "+outcomes[4]+", "+outcomes[5]+", "+outcomes[6]+", and "+outcomes[2];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function Networking() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Coding Classes");
+	var butn2=document.getElementById("Networking");
+	butn2.style.color="#0FA6A5";
+	butn2.style.borderColor = "#0FA6A5";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[4];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[8]+" and "+progareas[9];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[2]+", "+outcomes[4]+" and "+outcomes[7];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function AcademicInter() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Academic Interventions");
+	var butn2=document.getElementById("Value based coaching");
+	var butn3=document.getElementById("Yoga and Crossfit");
+	var butn4=document.getElementById("Competitive Rugby");
+	var butn5=document.getElementById("Comprehensive Rugby Program");
+	butn.style.color="#0FA6A5";
+	butn.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	butn4.style.color = "#D0D0D0";
+	butn4.style.borderColor = "#D0D0D0";
+	butn5.style.color = "#D0D0D0";
+	butn5.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[5];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[10];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[8]+", "+outcomes[9]+" and "+outcomes[10];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function ValueBased() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Academic Interventions");
+	var butn2=document.getElementById("Value based coaching");
+	var butn3=document.getElementById("Yoga and Crossfit");
+	var butn4=document.getElementById("Competitive Rugby");
+	var butn5=document.getElementById("Comprehensive Rugby Program");
+	butn2.style.color="#0FA6A5";
+	butn2.style.borderColor = "#0FA6A5";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	butn4.style.color = "#D0D0D0";
+	butn4.style.borderColor = "#D0D0D0";
+	butn5.style.color = "#D0D0D0";
+	butn5.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[6];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[11];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[1]+" and "+outcomes[17];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function Yoga() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Academic Interventions");
+	var butn2=document.getElementById("Value based coaching");
+	var butn3=document.getElementById("Yoga and Crossfit");
+	var butn4=document.getElementById("Competitive Rugby");
+	var butn5=document.getElementById("Comprehensive Rugby Program");
+	butn3.style.color="#0FA6A5";
+	butn3.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	butn4.style.color = "#D0D0D0";
+	butn4.style.borderColor = "#D0D0D0";
+	butn5.style.color = "#D0D0D0";
+	butn5.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[7];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[12];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[11];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function CompRugby() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Academic Interventions");
+	var butn2=document.getElementById("Value based coaching");
+	var butn3=document.getElementById("Yoga and Crossfit");
+	var butn4=document.getElementById("Competitive Rugby");
+	var butn5=document.getElementById("Comprehensive Rugby Program");
+	butn4.style.color="#0FA6A5";
+	butn4.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	butn5.style.color = "#D0D0D0";
+	butn5.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[8];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[13];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[11]+", "+outcomes[12]+" and "+outcomes[13];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+function ComprehenRugby() {
+	var ex=document.getElementById("Code School Examples");
+	var pra=document.getElementById("Code School Program Areas");
+	var out=document.getElementById("Code School Outcomes");
+	var para = document.getElementById("parag");
+	para.innerHTML="";
+	var div1=document.getElementById("Code School Div");
+	if(div1.style.display=="block") {
+		div1.style.display="none";
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+	}
+	else {
+	var butn=document.getElementById("Academic Interventions");
+	var butn2=document.getElementById("Value based coaching");
+	var butn3=document.getElementById("Yoga and Crossfit");
+	var butn4=document.getElementById("Competitive Rugby");
+	var butn5=document.getElementById("Comprehensive Rugby Program");
+	butn5.style.color="#0FA6A5";
+	butn5.style.borderColor = "#0FA6A5";
+	butn2.style.color = "#D0D0D0";
+	butn2.style.borderColor = "#D0D0D0";
+	butn.style.color = "#D0D0D0";
+	butn.style.borderColor = "#D0D0D0";
+	butn3.style.color = "#D0D0D0";
+	butn3.style.borderColor = "#D0D0D0";
+	butn4.style.color = "#D0D0D0";
+	butn4.style.borderColor = "#D0D0D0";
+	div1.style.display="block";
+	ex.onclick=function() {
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		ex.style.color = "#0FA6A5";
+		ex.style.borderColor = "#0FA6A5";
+		para.innerHTML = examples[9];
+	}
+	pra.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		out.style.color = "#D0D0D0";
+		out.style.borderColor = "#D0D0D0";
+		pra.style.color = "#0FA6A5";
+		pra.style.borderColor = "#0FA6A5";
+		var stri=progareas[14];
+		para.innerHTML = stri;
+	}
+	out.onclick=function() {
+		ex.style.color = "#D0D0D0";
+		ex.style.borderColor = "#D0D0D0";
+		pra.style.color = "#D0D0D0";
+		pra.style.borderColor = "#D0D0D0";
+		out.style.color = "#0FA6A5";
+		out.style.borderColor = "#0FA6A5";
+		var stri=outcomes[14]+", "+outcomes[15]+", "+outcomes[16]+", "+outcomes[17]+", "+outcomes[18]+" and "+outcomes[20];
+		para.innerHTML = stri;
+	}
+	div1.appendChild(para);
+	}
+}
+
+});
 
 </script>
 </body>
